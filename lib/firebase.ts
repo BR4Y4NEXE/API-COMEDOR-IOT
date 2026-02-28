@@ -4,11 +4,17 @@ import { getFirestore, Firestore } from 'firebase-admin/firestore';
 
 const db: Firestore = (() => {
   if (!getApps().length) {
+    if (process.env.npm_lifecycle_event === 'build') {
+      console.warn('⚠️ Building project: skipping Firebase initialization to prevent crypto errors.');
+      // Return a dummy db object during build phase
+      return {} as Firestore;
+    }
+
     try {
       // Método 1: JSON completo (método recomendado para Vercel)
       if (process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
         const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
-        
+
         // Validar que tenga los campos necesarios
         if (!serviceAccount.project_id || !serviceAccount.private_key || !serviceAccount.client_email) {
           throw new Error('Service account JSON is missing required fields');
@@ -39,5 +45,6 @@ const db: Firestore = (() => {
 
   return getFirestore();
 })();
+
 
 export { db };
