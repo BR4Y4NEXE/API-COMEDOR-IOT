@@ -5,7 +5,7 @@ import uuid
 
 from models import (
     Device, DeviceCreate, DeviceResponse, SensorReading,
-    ReadingCreate, ReadingResponse, OnlineStatus
+    ReadingCreate, ReadingResponse
 )
 
 app = FastAPI(title="PetCare IoT API", version="1.0.0")
