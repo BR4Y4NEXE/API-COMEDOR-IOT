@@ -1,18 +1,12 @@
 [project]
-name = "api-petcare"
+name = "api-comedor-iot"
 version = "1.0.0"
 requires-python = ">=3.11"
 dependencies = [
-    "fastapi==0.115.0",
-    "uvicorn[standard]==0.32.0",
-    "pydantic==2.9.2"
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "pydantic>=2.9.2"
 ]
-
-[tool.poetry]
-name = "api-petcare"
-version = "1.0.0"
-description = "PetCare IoT API"
-requires-python = ">=3.11"
 
 [build-system]
 requires = ["hatchling"]
