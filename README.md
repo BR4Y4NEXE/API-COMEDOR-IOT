@@ -1,79 +1,107 @@
-# PetCare Monitor (API_PetCare) 🐾
+# API COMEDOR IOT
 
-Un sistema integral de monitoreo IoT construido con Next.js para cuidar a tus mascotas a distancia. Este proyecto sirve como un Dashboard web y una API Backend que interactúa con hardware IoT (por ejemplo, un ESP32) equipado con sensores y actuadores para garantizar el bienestar de la mascota.
+API REST para la gestion de dispositivos IoT de alimentadores de mascotas.
 
-![Modern UI Preview](https://img.shields.io/badge/UI-Glassmorphism-cyan?style=for-the-badge) ![Next.js](https://img.shields.io/badge/Next.js_15-000000?style=for-the-badge&logo=nextdotjs) ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_v4-38B2AC?style=for-the-badge&logo=tailwind-css) ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
+## Tecnologias
 
-## ¿De qué se trata?
+- **FastAPI** - Framework web asincrono
+- **Uvicorn** - Servidor ASGI
+- **Pydantic** - Validacion de datos
 
-**PetCare Monitor** es el servidor central para un dispensador de alimento inteligente y un monitor ambiental. Permite a los dueños de mascotas:
-- 🌡️ **Monitorear el ambiente:** Ver la temperatura y humedad en tiempo real usando datos de un sensor DHT11.
-- 🥘 **Verificar disponibilidad de comida:** Saber si el tazón de comida está lleno o vacío mediante un sensor Infrarrojo.
-- ⚙️ **Alimentación remota:** Accionar un motor Servo a distancia para dispensar comida al instante.
-- 📊 **Análisis histórico:** Visualizar gráficas de los cambios ambientales y llevar un registro exacto (log) de a qué hora se ha dispersado el alimento.
+## Instalacion
 
-## ¿Qué problemas resuelve este sistema?
+```bash
+pip install -r requirements.txt
+```
 
-1. **Incertidumbre al salir de casa:** Elimina la preocupación de saber si dejaste suficiente comida. Con solo abrir el dashboard, puedes ver el estado del tazón.
-2. **Control Alimenticio:** Mediante el registro de alimentaciones y el control remoto, puedes alimentar a tu mascota estén donde estén, evitando sobrealimentación o desnutrición por olvidos.
-3. **Control Ambiental:** Las mascotas (especialmente reptiles, aves pequeñas o cachorros) son sensibles a temperaturas extremas. El monitoreo en tiempo real previene golpes de calor o frío advirtiendo las condiciones actuales.
+## Ejecucion
 
-## 🚀 Innovaciones y Modernización Reciente
+```bash
+uvicorn main:app --reload
+```
 
-Este repositorio ha sido recientemente actualizado y modernizado bajo los más altos estándares de desarrollo:
-- **Migración a App Router:** Actualizado de Pages Router a Next.js 15 App Router (`app/`), mejorando el rendimiento y la organización del código.
-- **Componentización:** Desacoplamiento de vistas en componentes reusables (`components/`) como `SensorCard`, `HistoryChart` y `LogTable`.
-- **UI/UX Premium:** Rediseño utilizando un estilo **Glassmorphism**, paletas de colores oscuras curadas (Slate/Cyan/Emerald) y micro-animaciones fluidas con **Framer Motion**.
-- **Seguridad Mejorada:** Se ha migrado toda configuración sensible (Firebase Credentials y API Keys de Hardware) a variables de entorno estandarizadas (`.env.local`), evitando vulnerabilidades públicas.
+El servidor se ejecutara en `http://localhost:8000`
 
----
+## Documentacion Interactiva
 
-## 🛠️ Tecnologías Utilizadas
+- Swagger UI: `http://localhost:8000/docs`
+- ReDoc: `http://localhost:8000/redoc`
 
-- **Frontend:** React 19, Next.js 15 (App Router), Tailwind V4, Framer Motion, Recharts, Lucide React.
-- **Backend (API Routes):** Node.js (via Next.js Route Handlers).
-- **Base de Datos:** Firebase / Firestore (Almacenamiento en la nube en tiempo real).
-- **Hardware Integrado (Vía API):** ESP32 / Arduino, Sensor DHT11, Sensor Infrarrojo, Motor Servo.
+## Endpoints
 
-## 💻 Instalación y Configuración Local
+### Dispositivos
 
-Sigue estos pasos para correr el proyecto en tu entorno local:
+| Metodo | Endpoint | Descripcion |
+|--------|----------|-------------|
+| GET | `/api/devices` | Listar todos los dispositivos |
+| GET | `/api/devices/{device_id}` | Obtener un dispositivo por ID |
+| POST | `/api/devices` | Crear un nuevo dispositivo |
+| DELETE | `/api/devices/{device_id}` | Eliminar un dispositivo |
 
-1. **Clonar el repositorio:**
-   ```bash
-   git clone https://github.com/BR4Y4NEXE/API_PetCare.git
-   cd API_PetCare
-   ```
+### Lecturas de Sensores
 
-2. **Instalar dependencias:**
-   ```bash
-   npm install
-   ```
+| Metodo | Endpoint | Descripcion |
+|--------|----------|-------------|
+| GET | `/api/devices/{device_id}/readings` | Obtener lecturas de un dispositivo |
+| POST | `/api/devices/{device_id}/readings` | Registrar una nueva lectura |
 
-3. **Configurar el entorno:**
-   Copia el archivo de ejemplo y crea tu archivo `.env.local`:
-   ```bash
-   cp .env.example .env.local
-   ```
-   Abre el archivo `.env.local` e introduce tus credenciales de Firebase (`FIREBASE_PROJECT_ID`, `FIREBASE_PRIVATE_KEY`, `FIREBASE_CLIENT_EMAIL`) y tu `NEXT_PUBLIC_API_KEY` para proteger la comunicación con tu hardware.
+### Sistema
 
-4. **Ejecutar el servidor de desarrollo:**
-   ```bash
-   npm run dev
-   ```
+| Metodo | Endpoint | Descripcion |
+|--------|----------|-------------|
+| GET | `/health` | Verificar estado del servidor |
 
-5. **Abre tu navegador en** [http://localhost:3000](http://localhost:3000) para ver el dashboard.
+## Modelos de Datos
 
-## 🌐 Endpoints de la API Hardware
+### DeviceCreate
+```json
+{
+  "name": "string",
+  "location": "string",
+  "device_id": "string"
+}
+```
 
-El hardware IoT (ESP32) se comunica con este servidor usando los siguientes endpoints situados en `/api`:
+### DeviceResponse
+```json
+{
+  "id": "string",
+  "device_id": "string",
+  "name": "string",
+  "location": "string",
+  "is_online": "boolean",
+  "last_reading": "SensorReading | null",
+  "created_at": "string",
+  "updated_at": "string"
+}
+```
 
-- `POST /api/send-dht`: Recibe Temperatura y Humedad.
-- `POST /api/send-infrared`: Recibe el estado del plato de comida (Lleno/Vacío).
-- `GET /api/servo-status`: Endpoint súper ligero para que el ESP32 sepa si debe girar el motor (`1` = Activar, `0` = Esperar).
-- `POST /api/servo-executed`: Confirma al servidor que el motor giró con éxito.
+### ReadingCreate
+```json
+{
+  "temperature": "number",
+  "humidity": "number",
+  "timestamp": "string (opcional)",
+  "ir_detected": "boolean (opcional)"
+}
+```
 
-*Nota: Todos los endpoints `POST` requieren que el Hardware envíe un header `x-api-key` válido por seguridad.*
+### SensorReading
+```json
+{
+  "id": "string",
+  "device_id": "string",
+  "temperature": "number",
+  "humidity": "number",
+  "timestamp": "string",
+  "ir_detected": "boolean | null"
+}
+```
 
----
-*Hecho para el cuidado y cariño de las mascotas mediante tecnología.*
+## Estados del Dispositivo
+
+Un dispositivo se considera **online** si ha enviado al menos una lectura en los ultimos **5 minutos**.
+
+## CORS
+
+La API permite peticiones desde cualquier origen (`*`). Configurar segun necesidades en produccion.
