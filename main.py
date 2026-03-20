@@ -126,7 +126,7 @@ async def create_reading(device_id: str, data: ReadingCreate):
                 humidity=data.humidity,
                 timestamp=data.timestamp or datetime.now().isoformat() + "Z"
             )
-            if "ir_detected" in data.model_fields_set():
+            if data.ir_detected is not None:
                 reading.ir_detected = data.ir_detected
             readings_db[device_id].append(reading)
             return ReadingResponse(
