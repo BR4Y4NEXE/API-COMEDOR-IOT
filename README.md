@@ -247,4 +247,4 @@ uvicorn main:app --reload
 
 ## Nota sobre persistencia
 
-Esta API usa almacenamiento en memoria (RAM). Los datos se pierden al reiniciar el servidor. Para produccion, considera usar una base de datos como PostgreSQL o SQLite.
+Esta API usa almacenamiento en memoria (RAM). Los datos se pierden al reiniciar el servidor. Para produccion, considero usar una base de datos como PostgreSQL o SQLite.
